@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
 function formatDate(dateStr) {
@@ -463,8 +463,114 @@ function ParticipantList({ event, votes }) {
     );
 }
 
+function DeleteEventModal({ event, show, onClose }) {
+    const [password, setPassword] = useState('');
+    const [deleting, setDeleting] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (show) {
+            setPassword('');
+            setError('');
+        }
+    }, [show]);
+
+    function handleDelete(e) {
+        e.preventDefault();
+        if (!password.trim()) {
+            setError('Please enter the password.');
+            return;
+        }
+        setDeleting(true);
+        setError('');
+        router.delete(`/events/${event.id}`, {
+            data: { password: password },
+            onError: (errors) => {
+                setError(errors.password || 'Something went wrong.');
+                setDeleting(false);
+            },
+            onSuccess: () => {
+                setDeleting(false);
+            },
+        });
+    }
+
+    if (!show) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+            <div
+                className="glass relative w-full max-w-md p-6 sm:p-8 animate-fade-in-up"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div className="flex items-center gap-3 mb-5">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-red-500/15 border border-red-500/20">
+                        <svg className="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-semibold text-white">Delete Event</h3>
+                        <p className="text-xs text-slate-400">This action cannot be undone</p>
+                    </div>
+                </div>
+
+                <p className="text-sm text-slate-300 mb-1">
+                    You are about to delete <span className="font-semibold text-white">"{event.title}"</span> and all its votes.
+                </p>
+                <p className="text-sm text-slate-400 mb-5">Enter the password to confirm.</p>
+
+                <form onSubmit={handleDelete}>
+                    <input
+                        type="password"
+                        className="glass-input mb-2"
+                        placeholder="Enter password..."
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoFocus
+                    />
+                    {error && (
+                        <p className="text-sm text-red-400 mb-3 flex items-center gap-1.5">
+                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 16v-4M12 8h.01" />
+                            </svg>
+                            {error}
+                        </p>
+                    )}
+
+                    <div className="flex gap-3 mt-4">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="btn-ghost flex-1"
+                            disabled={deleting}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={deleting}
+                            className="flex-1 px-4 py-2.5 rounded-xl font-semibold text-sm border-none cursor-pointer transition-all duration-200"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.9))',
+                                color: '#fecaca',
+                                boxShadow: '0 4px 15px rgba(239, 68, 68, 0.3)',
+                            }}
+                        >
+                            {deleting ? 'Deleting...' : 'Delete Event'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+}
+
 export default function EventDetail({ event }) {
     const votes = event.votes || [];
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     return (
         <>
@@ -478,10 +584,10 @@ export default function EventDetail({ event }) {
             <div className="min-h-screen relative z-10">
                 {/* Header */}
                 <header className="pt-12 pb-8 px-4 sm:px-6">
-                    <div className="max-w-3xl mx-auto">
+                    <div className="max-w-3xl mx-auto flex items-center justify-between">
                         <Link
                             href="/"
-                            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors no-underline mb-6"
+                            className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors no-underline"
                         >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                 <line x1="19" y1="12" x2="5" y2="12" />
@@ -489,6 +595,17 @@ export default function EventDetail({ event }) {
                             </svg>
                             Back to Events
                         </Link>
+                        <button
+                            onClick={() => setShowDeleteModal(true)}
+                            className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-red-400 transition-colors cursor-pointer bg-transparent border-none p-2 rounded-lg hover:bg-red-500/10"
+                            title="Delete Event"
+                            id="delete-event-btn"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete
+                        </button>
                     </div>
                 </header>
 
@@ -596,6 +713,13 @@ export default function EventDetail({ event }) {
                     </div>
                 </main>
             </div>
+
+            {/* Delete Event Modal */}
+            <DeleteEventModal
+                event={event}
+                show={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+            />
         </>
     );
 }

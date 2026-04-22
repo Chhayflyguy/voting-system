@@ -98,4 +98,22 @@ class EventController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * Delete an event (requires password).
+     */
+    public function destroy(Request $request, Event $event)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if ($request->password !== 'komdelete') {
+            return redirect()->back()->withErrors(['password' => 'Incorrect password.']);
+        }
+
+        $event->delete();
+
+        return redirect()->route('events.index');
+    }
 }
