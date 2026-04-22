@@ -8,3 +8,4 @@ Route::get('/events/create', [EventController::class, 'create'])->name('events.c
 Route::post('/events', [EventController::class, 'store'])->name('events.store');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
 Route::post('/events/{event}/vote', [EventController::class, 'vote'])->name('events.vote');
+Route::delete('/events/{event}/vote/{vote}', [EventController::class, 'removeVote'])->name('events.removeVote');

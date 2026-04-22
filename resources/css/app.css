@@ -252,6 +252,50 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         color: #cbd5e1;
         transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .remove-chip-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        cursor: pointer;
+        opacity: 0;
+        transform: scale(0.7);
+        transition: all 0.2s ease;
+        margin-left: 0.1rem;
+        padding: 0;
+        flex-shrink: 0;
+    }
+
+    .participant-chip:hover .remove-chip-btn {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    .remove-chip-btn:hover {
+        background: rgba(239, 68, 68, 0.35);
+        color: #fca5a5;
+        transform: scale(1.1) !important;
+    }
+
+    .remove-chip-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* On touch devices, always show the remove button */
+    @media (hover: none) {
+        .remove-chip-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 
     .floating-orb {

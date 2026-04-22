@@ -83,4 +83,19 @@ class EventController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * Remove a vote (delete a participant).
+     */
+    public function removeVote(Event $event, Vote $vote)
+    {
+        // Ensure the vote belongs to this event
+        if ($vote->event_id !== $event->id) {
+            abort(404);
+        }
+
+        $vote->delete();
+
+        return redirect()->back();
+    }
 }

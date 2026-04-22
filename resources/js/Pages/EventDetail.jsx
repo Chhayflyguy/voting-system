@@ -30,10 +30,10 @@ function setStoredVote(eventId, userName, status) {
     localStorage.setItem(getStorageKey(eventId), JSON.stringify({ userName, status }));
 }
 
-function ParticipantChip({ name, color }) {
+function ParticipantChip({ name, color, onRemove, removing }) {
     const initial = name.charAt(0).toUpperCase();
     return (
-        <div className="participant-chip animate-slide-in">
+        <div className="participant-chip animate-slide-in group">
             <div
                 className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
                 style={{
@@ -45,11 +45,26 @@ function ParticipantChip({ name, color }) {
                 {initial}
             </div>
             <span className="truncate max-w-[120px]">{name}</span>
+            {onRemove && (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove();
+                    }}
+                    disabled={removing}
+                    className="remove-chip-btn"
+                    title={`Remove ${name}`}
+                >
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            )}
         </div>
     );
 }
 
-function TeamColumn({ title, color, icon, members }) {
+function TeamColumn({ title, color, icon, members, onRemove, removingId }) {
     return (
         <div className="flex-1">
             <div className="flex items-center gap-2 mb-4">
@@ -73,7 +88,13 @@ function TeamColumn({ title, color, icon, members }) {
             <div className="space-y-2">
                 {members.length > 0 ? (
                     members.map((vote) => (
-                        <ParticipantChip key={vote.id} name={vote.user_name} color={color} />
+                        <ParticipantChip
+                            key={vote.id}
+                            name={vote.user_name}
+                            color={color}
+                            onRemove={() => onRemove(vote.id)}
+                            removing={removingId === vote.id}
+                        />
                     ))
                 ) : (
                     <p className="text-xs text-slate-500 italic pl-1">No one yet</p>
@@ -240,6 +261,31 @@ function VoteSection({ event, votes }) {
 
 function ParticipantList({ event, votes }) {
     const isFootball = event.is_football_match;
+    const [removingId, setRemovingId] = useState(null);
+    const [confirmId, setConfirmId] = useState(null);
+
+    function handleRemove(voteId) {
+        if (confirmId === voteId) {
+            // Second click = confirmed, delete it
+            setRemovingId(voteId);
+            router.delete(`/events/${event.id}/vote/${voteId}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    setRemovingId(null);
+                    setConfirmId(null);
+                },
+                onError: () => {
+                    setRemovingId(null);
+                    setConfirmId(null);
+                },
+            });
+        } else {
+            // First click = show confirm state
+            setConfirmId(voteId);
+            // Auto-cancel confirmation after 3 seconds
+            setTimeout(() => setConfirmId((cur) => (cur === voteId ? null : cur)), 3000);
+        }
+    }
 
     if (isFootball) {
         const teamA = votes.filter((v) => v.status === 'team_a');
@@ -264,6 +310,8 @@ function ParticipantList({ event, votes }) {
                         color="#f59e0b"
                         icon="A"
                         members={teamA}
+                        onRemove={handleRemove}
+                        removingId={removingId}
                     />
                     <div className="hidden sm:block w-px bg-white/10 self-stretch" />
                     <div className="sm:hidden h-px bg-white/10" />
@@ -272,6 +320,8 @@ function ParticipantList({ event, votes }) {
                         color="#10b981"
                         icon="B"
                         members={teamB}
+                        onRemove={handleRemove}
+                        removingId={removingId}
                     />
                 </div>
 
@@ -280,9 +330,25 @@ function ParticipantList({ event, votes }) {
                         <h4 className="text-sm font-medium text-slate-400 mb-3">Not Joining ({notJoining.length})</h4>
                         <div className="flex flex-wrap gap-2">
                             {notJoining.map((v) => (
-                                <ParticipantChip key={v.id} name={v.user_name} color="#ef4444" />
+                                <ParticipantChip
+                                    key={v.id}
+                                    name={v.user_name}
+                                    color="#ef4444"
+                                    onRemove={() => handleRemove(v.id)}
+                                    removing={removingId === v.id}
+                                />
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {confirmId && (
+                    <div className="mt-4 flex items-center gap-2 text-sm text-amber-400 animate-fade-in-up">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4M12 8h.01" />
+                        </svg>
+                        Click ✕ again to confirm removal
                     </div>
                 )}
             </div>
@@ -323,7 +389,13 @@ function ParticipantList({ event, votes }) {
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {going.map((v) => (
-                                    <ParticipantChip key={v.id} name={v.user_name} color="#6366f1" />
+                                    <ParticipantChip
+                                        key={v.id}
+                                        name={v.user_name}
+                                        color="#6366f1"
+                                        onRemove={() => handleRemove(v.id)}
+                                        removing={removingId === v.id}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -340,7 +412,13 @@ function ParticipantList({ event, votes }) {
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {maybe.map((v) => (
-                                    <ParticipantChip key={v.id} name={v.user_name} color="#f59e0b" />
+                                    <ParticipantChip
+                                        key={v.id}
+                                        name={v.user_name}
+                                        color="#f59e0b"
+                                        onRemove={() => handleRemove(v.id)}
+                                        removing={removingId === v.id}
+                                    />
                                 ))}
                             </div>
                         </div>
@@ -357,11 +435,27 @@ function ParticipantList({ event, votes }) {
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {notJoining.map((v) => (
-                                    <ParticipantChip key={v.id} name={v.user_name} color="#ef4444" />
+                                    <ParticipantChip
+                                        key={v.id}
+                                        name={v.user_name}
+                                        color="#ef4444"
+                                        onRemove={() => handleRemove(v.id)}
+                                        removing={removingId === v.id}
+                                    />
                                 ))}
                             </div>
                         </div>
                     )}
+                </div>
+            )}
+
+            {confirmId && (
+                <div className="mt-4 flex items-center gap-2 text-sm text-amber-400 animate-fade-in-up">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
+                    </svg>
+                    Click ✕ again to confirm removal
                 </div>
             )}
         </div>
