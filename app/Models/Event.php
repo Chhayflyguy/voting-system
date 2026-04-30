@@ -16,6 +16,7 @@ class Event extends Model
         'event_date',
         'location',
         'is_football_match',
+        'total_cost',
     ];
 
     /**
@@ -35,5 +36,13 @@ class Event extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    /**
+     * Get the attendances for the event.
+     */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
     }
 }

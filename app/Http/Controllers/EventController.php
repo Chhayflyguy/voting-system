@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Vote;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -115,5 +116,85 @@ class EventController extends Controller
         $event->delete();
 
         return redirect()->route('events.index');
+    }
+
+    /**
+     * Show the checklist for an event.
+     */
+    public function checklist(Event $event)
+    {
+        // Get all people who voted to join
+        $voters = $event->votes()->whereIn('status', ['join', 'team_a', 'team_b'])->get();
+
+        // Ensure attendance record exists for each voter
+        foreach ($voters as $voter) {
+            Attendance::firstOrCreate([
+                'event_id' => $event->id,
+                'user_name' => $voter->user_name,
+            ]);
+        }
+
+        $event->load(['attendances' => function ($query) {
+            $query->orderBy('user_name', 'asc');
+        }]);
+
+        return Inertia::render('EventChecklist', [
+            'event' => $event,
+        ]);
+    }
+
+    /**
+     * Update attendance status.
+     */
+    public function updateAttendance(Request $request, Event $event, Attendance $attendance)
+    {
+        // Ensure the attendance belongs to this event
+        if ($attendance->event_id !== $event->id) {
+            abort(404);
+        }
+
+        $validated = $request->validate([
+            'is_present' => 'nullable|boolean',
+            'has_paid' => 'nullable|boolean',
+        ]);
+
+        $attendance->update(array_filter($validated, function ($value) {
+            return $value !== null;
+        }));
+
+        return redirect()->back();
+    }
+
+    /**
+     * Update event total cost.
+     */
+    public function updateCost(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'total_cost' => 'required|numeric|min:0',
+        ]);
+
+        $event->update([
+            'total_cost' => $validated['total_cost'],
+        ]);
+
+        return redirect()->back();
+    }
+
+    /**
+     * Add a new person to the checklist.
+     */
+    public function addAttendance(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'user_name' => 'required|string|max:255',
+        ]);
+
+        Attendance::firstOrCreate([
+            'event_id' => $event->id,
+            'user_name' => $validated['user_name'],
+        ]);
+
+        return redirect()->back();
     }
 }
