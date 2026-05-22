@@ -50,6 +50,7 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('flash', [
             'type' => 'created',
             'title' => $event->title,
+            'id' => now()->valueOf(),
         ]);
     }
 
@@ -122,6 +123,7 @@ class EventController extends Controller
         return redirect()->route('events.index')->with('flash', [
             'type' => 'deleted',
             'title' => $title,
+            'id' => now()->valueOf(),
         ]);
     }
 

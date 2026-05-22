@@ -1,5 +1,5 @@
-import { Head, Link, usePage } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { Head, Link, usePage, router } from '@inertiajs/react';
+import { useState, useEffect, useRef } from 'react';
 
 function formatDate(dateStr) {
     const d = new Date(dateStr);
@@ -183,13 +183,23 @@ function EventCard({ event, index }) {
 }
 
 export default function Home({ events }) {
-    const { flash } = usePage().props;
-    const [showFlash, setShowFlash] = useState(!!flash);
+    const { flash: initialFlash } = usePage().props;
+    const [flashData, setFlashData] = useState(initialFlash || null);
+    const [showFlash, setShowFlash] = useState(!!initialFlash);
+    const seenTimestampRef = useRef(null);
 
-    // Reset dialog visibility when flash changes (new navigation)
     useEffect(() => {
-        setShowFlash(!!flash);
-    }, [flash]);
+        // Listen to every Inertia navigation — this fires reliably in production
+        const removeListener = router.on('navigate', (event) => {
+            const flash = event.detail.page.props.flash;
+            if (flash && flash.id !== seenTimestampRef.current) {
+                seenTimestampRef.current = flash.id;
+                setFlashData(flash);
+                setShowFlash(true);
+            }
+        });
+        return removeListener; // cleanup on unmount
+    }, []);
 
     return (
         <>
@@ -197,7 +207,7 @@ export default function Home({ events }) {
 
             {/* Success / Delete flash dialog */}
             {showFlash && (
-                <SuccessDialog flash={flash} onClose={() => setShowFlash(false)} />
+                <SuccessDialog flash={flashData} onClose={() => setShowFlash(false)} />
             )}
 
             {/* Floating orbs */}
