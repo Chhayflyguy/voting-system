@@ -47,7 +47,7 @@ class EventController extends Controller
 
         $event = Event::create($validated);
 
-        return redirect()->route('events.index')->with('flash', [
+        return redirect()->route('events.show', $event)->with('flash', [
             'type' => 'created',
             'title' => $event->title,
             'id' => now()->valueOf(),

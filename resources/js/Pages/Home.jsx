@@ -1,4 +1,4 @@
-import { Head, Link, usePage, router } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
 
 function formatDate(dateStr) {
@@ -183,23 +183,19 @@ function EventCard({ event, index }) {
 }
 
 export default function Home({ events }) {
-    const { flash: initialFlash } = usePage().props;
-    const [flashData, setFlashData] = useState(initialFlash || null);
-    const [showFlash, setShowFlash] = useState(!!initialFlash);
+    const { flash } = usePage().props;
+    const [flashData, setFlashData] = useState(null);
+    const [showFlash, setShowFlash] = useState(false);
     const seenTimestampRef = useRef(null);
 
+    // Detect flash from both initial page load and SPA navigations
     useEffect(() => {
-        // Listen to every Inertia navigation — this fires reliably in production
-        const removeListener = router.on('navigate', (event) => {
-            const flash = event.detail.page.props.flash;
-            if (flash && flash.id !== seenTimestampRef.current) {
-                seenTimestampRef.current = flash.id;
-                setFlashData(flash);
-                setShowFlash(true);
-            }
-        });
-        return removeListener; // cleanup on unmount
-    }, []);
+        if (flash && flash.id !== seenTimestampRef.current) {
+            seenTimestampRef.current = flash.id;
+            setFlashData(flash);
+            setShowFlash(true);
+        }
+    }, [flash]);
 
     return (
         <>
