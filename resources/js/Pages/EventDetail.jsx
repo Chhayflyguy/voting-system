@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 function formatDate(dateStr) {
     const d = new Date(dateStr);
@@ -571,54 +571,10 @@ function DeleteEventModal({ event, show, onClose }) {
 export default function EventDetail({ event }) {
     const votes = event.votes || [];
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const { flash } = usePage().props;
-    const [showCreatedBanner, setShowCreatedBanner] = useState(false);
-    const seenRef = useRef(null);
-
-    useEffect(() => {
-        if (flash && flash.type === 'created' && flash.id !== seenRef.current) {
-            seenRef.current = flash.id;
-            setShowCreatedBanner(true);
-            const t = setTimeout(() => setShowCreatedBanner(false), 4000);
-            return () => clearTimeout(t);
-        }
-    }, [flash]);
 
     return (
         <>
             <Head title={event.title} />
-
-            {/* Created success banner */}
-            {showCreatedBanner && (
-                <div
-                    className="fixed top-4 left-1/2 z-50 animate-fade-in-up"
-                    style={{
-                        transform: 'translateX(-50%)',
-                        background: 'linear-gradient(135deg, rgba(99,102,241,0.9), rgba(139,92,246,0.85))',
-                        backdropFilter: 'blur(16px)',
-                        border: '1px solid rgba(165,180,252,0.3)',
-                        borderRadius: '1rem',
-                        padding: '0.75rem 1.25rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.625rem',
-                        boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
-                        color: 'white',
-                        fontSize: '0.9rem',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap',
-                    }}
-                >
-                    <svg style={{ width: '1.1rem', height: '1.1rem', color: '#a5f3fc', flexShrink: 0 }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <polyline points="20 6 9 17 4 12" />
-                    </svg>
-                    Event Created! 🎉
-                    <button
-                        onClick={() => setShowCreatedBanner(false)}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.6)', marginLeft: '0.25rem', padding: '0 0.15rem', fontSize: '1rem', lineHeight: 1 }}
-                    >✕</button>
-                </div>
-            )}
 
             {/* Floating orbs */}
             <div className="floating-orb" style={{ width: 320, height: 320, background: '#6366f1', top: '5%', left: '10%' }} />
