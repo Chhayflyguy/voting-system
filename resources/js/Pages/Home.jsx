@@ -184,11 +184,13 @@ function EventCard({ event, index }) {
 
 export default function Home({ events }) {
     const { flash } = usePage().props;
-    const [flashData, setFlashData] = useState(null);
-    const [showFlash, setShowFlash] = useState(false);
-    const seenTimestampRef = useRef(null);
 
-    // Detect flash from both initial page load and SPA navigations
+    // Initialize directly from flash so dialog shows immediately on page load / redirect
+    const [flashData, setFlashData] = useState(flash || null);
+    const [showFlash, setShowFlash] = useState(!!flash);
+    const seenTimestampRef = useRef(flash?.id ?? null);
+
+    // Also catch subsequent SPA navigations that update flash without unmounting
     useEffect(() => {
         if (flash && flash.id !== seenTimestampRef.current) {
             seenTimestampRef.current = flash.id;
