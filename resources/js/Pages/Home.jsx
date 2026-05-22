@@ -1,4 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 function formatDate(dateStr) {
     const d = new Date(dateStr);
@@ -11,6 +12,93 @@ function formatDate(dateStr) {
         minute: '2-digit',
         timeZone: 'Asia/Phnom_Penh',
     });
+}
+
+function SuccessDialog({ flash, onClose }) {
+    const [countdown, setCountdown] = useState(3);
+
+    useEffect(() => {
+        if (!flash) return;
+        setCountdown(3);
+        const interval = setInterval(() => {
+            setCountdown((prev) => {
+                if (prev <= 1) {
+                    clearInterval(interval);
+                    onClose();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [flash]);
+
+    if (!flash) return null;
+
+    const isCreated = flash.type === 'created';
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+            <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" />
+            <div
+                className="glass relative w-full max-w-md p-8 animate-fade-in-up text-center"
+                style={{ zIndex: 51 }}
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* Icon */}
+                <div
+                    className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
+                    style={isCreated ? {
+                        background: 'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.2))',
+                        border: '2px solid rgba(99,102,241,0.4)',
+                        boxShadow: '0 0 40px rgba(99,102,241,0.3)',
+                    } : {
+                        background: 'linear-gradient(135deg, rgba(239,68,68,0.25), rgba(220,38,38,0.15))',
+                        border: '2px solid rgba(239,68,68,0.35)',
+                        boxShadow: '0 0 40px rgba(239,68,68,0.2)',
+                    }}
+                >
+                    {isCreated ? (
+                        <svg className="w-10 h-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    ) : (
+                        <svg className="w-10 h-10 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    )}
+                </div>
+
+                <h2 className="text-2xl font-bold text-white mb-2">
+                    {isCreated ? 'Event Created! 🎉' : 'Event Deleted'}
+                </h2>
+                <p className="text-slate-300 mb-1">
+                    <span className={`font-semibold ${isCreated ? 'text-indigo-300' : 'text-red-300'}`}>
+                        &ldquo;{flash.title}&rdquo;
+                    </span>{' '}
+                    {isCreated ? 'has been created successfully.' : 'has been deleted successfully.'}
+                </p>
+                <p className="text-slate-400 text-sm mb-8">
+                    This dialog will close in{' '}
+                    <span className={`font-semibold ${isCreated ? 'text-indigo-400' : 'text-red-400'}`}>
+                        {countdown}
+                    </span>s...
+                </p>
+
+                <button
+                    onClick={onClose}
+                    className="btn-primary w-full flex items-center justify-center gap-2"
+                    id="flash-dismiss-btn"
+                >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path d="M9 12l2 2 4-4" />
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    Got it!
+                </button>
+            </div>
+        </div>
+    );
 }
 
 function EventCard({ event, index }) {
@@ -95,9 +183,22 @@ function EventCard({ event, index }) {
 }
 
 export default function Home({ events }) {
+    const { flash } = usePage().props;
+    const [showFlash, setShowFlash] = useState(!!flash);
+
+    // Reset dialog visibility when flash changes (new navigation)
+    useEffect(() => {
+        setShowFlash(!!flash);
+    }, [flash]);
+
     return (
         <>
             <Head title="Dashboard" />
+
+            {/* Success / Delete flash dialog */}
+            {showFlash && (
+                <SuccessDialog flash={flash} onClose={() => setShowFlash(false)} />
+            )}
 
             {/* Floating orbs */}
             <div className="floating-orb" style={{ width: 300, height: 300, background: '#6366f1', top: '10%', left: '5%' }} />

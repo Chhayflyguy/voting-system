@@ -45,9 +45,12 @@ class EventController extends Controller
             'is_football_match' => 'boolean',
         ]);
 
-        Event::create($validated);
+        $event = Event::create($validated);
 
-        return redirect()->route('events.index');
+        return redirect()->route('events.index')->with('flash', [
+            'type' => 'created',
+            'title' => $event->title,
+        ]);
     }
 
     /**
@@ -113,9 +116,13 @@ class EventController extends Controller
             return redirect()->back()->withErrors(['password' => 'Incorrect password.']);
         }
 
+        $title = $event->title;
         $event->delete();
 
-        return redirect()->route('events.index');
+        return redirect()->route('events.index')->with('flash', [
+            'type' => 'deleted',
+            'title' => $title,
+        ]);
     }
 
     /**

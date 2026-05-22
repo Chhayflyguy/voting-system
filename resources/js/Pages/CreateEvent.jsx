@@ -1,5 +1,4 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import { useState } from 'react';
 
 export default function CreateEvent() {
     const { data, setData, post, processing, errors } = useForm({
@@ -20,6 +19,7 @@ export default function CreateEvent() {
             <Head title="Create Event" />
 
             {/* Floating orbs */}
+
             <div className="floating-orb" style={{ width: 280, height: 280, background: '#8b5cf6', top: '20%', right: '10%' }} />
             <div className="floating-orb" style={{ width: 220, height: 220, background: '#6366f1', bottom: '20%', left: '5%', animationDelay: '-5s' }} />
 
