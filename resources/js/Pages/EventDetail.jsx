@@ -144,7 +144,7 @@ function VoteSection({ event, votes }) {
     return (
         <div className="glass p-6 sm:p-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
-                <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-5 h-5 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path d="M9 12l2 2 4-4" />
                     <circle cx="12" cy="12" r="10" />
                 </svg>
@@ -296,7 +296,7 @@ function ParticipantList({ event, votes }) {
         return (
             <div className="glass p-6 sm:p-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
                 <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg className="w-5 h-5 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -364,7 +364,7 @@ function ParticipantList({ event, votes }) {
     return (
         <div className="glass p-6 sm:p-8 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
             <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-                <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <svg className="w-5 h-5 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                     <circle cx="9" cy="7" r="4" />
                     <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
@@ -383,8 +383,8 @@ function ParticipantList({ event, votes }) {
                     {going.length > 0 && (
                         <div>
                             <div className="flex items-center gap-2 mb-3">
-                                <div className="w-2 h-2 rounded-full bg-indigo-400" />
-                                <h4 className="text-sm font-medium text-indigo-300">
+                                <div className="w-2 h-2 rounded-full bg-gold-400" />
+                                <h4 className="text-sm font-medium text-gold-300">
                                     Going ({going.length})
                                 </h4>
                             </div>
@@ -393,7 +393,7 @@ function ParticipantList({ event, votes }) {
                                     <ParticipantChip
                                         key={v.id}
                                         name={v.user_name}
-                                        color="#6366f1"
+                                        color="#d4af37"
                                         onRemove={() => handleRemove(v.id)}
                                         removing={removingId === v.id}
                                     />
@@ -577,9 +577,9 @@ export default function EventDetail({ event }) {
             <Head title={event.title} />
 
             {/* Floating orbs */}
-            <div className="floating-orb" style={{ width: 320, height: 320, background: '#6366f1', top: '5%', left: '10%' }} />
-            <div className="floating-orb" style={{ width: 240, height: 240, background: '#06b6d4', bottom: '10%', right: '5%', animationDelay: '-8s' }} />
-            <div className="floating-orb" style={{ width: 180, height: 180, background: '#8b5cf6', top: '60%', left: '60%', animationDelay: '-15s' }} />
+            <div className="floating-orb" style={{ width: 320, height: 320, background: '#d4af37', top: '5%', left: '10%' }} />
+            <div className="floating-orb" style={{ width: 240, height: 240, background: '#3a63c0', bottom: '10%', right: '5%', animationDelay: '-8s' }} />
+            <div className="floating-orb" style={{ width: 180, height: 180, background: '#f0d78a', top: '60%', left: '60%', animationDelay: '-15s' }} />
 
             <div className="min-h-screen relative z-10">
                 {/* Header */}
@@ -598,7 +598,7 @@ export default function EventDetail({ event }) {
                         <div className="flex items-center gap-2">
                             <Link
                                 href={`/events/${event.id}/checklist`}
-                                className="inline-flex items-center gap-1.5 text-sm text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-lg hover:bg-indigo-500/20 no-underline"
+                                className="inline-flex items-center gap-1.5 text-sm text-gold-400 hover:text-gold-300 transition-colors cursor-pointer bg-gold-500/10 border border-gold-500/20 px-3 py-1.5 rounded-lg hover:bg-gold-500/20 no-underline"
                                 id="checklist-event-btn"
                             >
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -656,8 +656,8 @@ export default function EventDetail({ event }) {
 
                             <div className="grid gap-4 sm:grid-cols-2 mb-4">
                                 <div className="flex items-center gap-3 glass-subtle p-4">
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-indigo-500/15 border border-indigo-500/20">
-                                        <svg className="w-5 h-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gold-500/15 border border-gold-500/20">
+                                        <svg className="w-5 h-5 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                             <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                                             <line x1="16" y1="2" x2="16" y2="6" />
                                             <line x1="8" y1="2" x2="8" y2="6" />
@@ -670,8 +670,8 @@ export default function EventDetail({ event }) {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 glass-subtle p-4">
-                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/15 border border-cyan-500/20">
-                                        <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-gold-500/15 border border-gold-500/20">
+                                        <svg className="w-5 h-5 text-gold-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                             <circle cx="12" cy="10" r="3" />
                                         </svg>
@@ -690,7 +690,7 @@ export default function EventDetail({ event }) {
                             {/* Stats */}
                             <div className="mt-5 pt-5 border-t border-white/10 flex items-center gap-6">
                                 <div className="flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                                         <circle cx="9" cy="7" r="4" />
                                     </svg>

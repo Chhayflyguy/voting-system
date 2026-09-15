@@ -20,8 +20,8 @@ export default function CreateEvent() {
 
             {/* Floating orbs */}
 
-            <div className="floating-orb" style={{ width: 280, height: 280, background: '#8b5cf6', top: '20%', right: '10%' }} />
-            <div className="floating-orb" style={{ width: 220, height: 220, background: '#6366f1', bottom: '20%', left: '5%', animationDelay: '-5s' }} />
+            <div className="floating-orb" style={{ width: 280, height: 280, background: '#f0d78a', top: '20%', right: '10%' }} />
+            <div className="floating-orb" style={{ width: 220, height: 220, background: '#d4af37', bottom: '20%', left: '5%', animationDelay: '-5s' }} />
 
             <div className="min-h-screen relative z-10">
                 {/* Header */}
@@ -39,7 +39,7 @@ export default function CreateEvent() {
                         </Link>
                         <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
                             Create
-                            <span className="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent"> Event</span>
+                            <span className="bg-gradient-to-r from-gold-400 to-gold-300 bg-clip-text text-transparent"> Event</span>
                         </h1>
                         <p className="mt-2 text-slate-400">Set up a new event and share it with others</p>
                     </div>

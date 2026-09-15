@@ -49,9 +49,9 @@ function SuccessDialog({ flash, onClose }) {
                 <div
                     className="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center"
                     style={isCreated ? {
-                        background: 'linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.2))',
-                        border: '2px solid rgba(99,102,241,0.4)',
-                        boxShadow: '0 0 40px rgba(99,102,241,0.3)',
+                        background: 'linear-gradient(135deg, rgba(212,175,55,0.3), rgba(240,215,138,0.2))',
+                        border: '2px solid rgba(212,175,55,0.4)',
+                        boxShadow: '0 0 40px rgba(212,175,55,0.3)',
                     } : {
                         background: 'linear-gradient(135deg, rgba(239,68,68,0.25), rgba(220,38,38,0.15))',
                         border: '2px solid rgba(239,68,68,0.35)',
@@ -59,7 +59,7 @@ function SuccessDialog({ flash, onClose }) {
                     }}
                 >
                     {isCreated ? (
-                        <svg className="w-10 h-10 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-10 h-10 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <polyline points="20 6 9 17 4 12" />
                         </svg>
                     ) : (
@@ -73,14 +73,14 @@ function SuccessDialog({ flash, onClose }) {
                     {isCreated ? 'Event Created! 🎉' : 'Event Deleted'}
                 </h2>
                 <p className="text-slate-300 mb-1">
-                    <span className={`font-semibold ${isCreated ? 'text-indigo-300' : 'text-red-300'}`}>
+                    <span className={`font-semibold ${isCreated ? 'text-gold-300' : 'text-red-300'}`}>
                         &ldquo;{flash.title}&rdquo;
                     </span>{' '}
                     {isCreated ? 'has been created successfully.' : 'has been deleted successfully.'}
                 </p>
                 <p className="text-slate-400 text-sm mb-8">
                     This dialog will close in{' '}
-                    <span className={`font-semibold ${isCreated ? 'text-indigo-400' : 'text-red-400'}`}>
+                    <span className={`font-semibold ${isCreated ? 'text-gold-400' : 'text-red-400'}`}>
                         {countdown}
                     </span>s...
                 </p>
@@ -146,13 +146,13 @@ function EventCard({ event, index }) {
                     <h3 className="text-lg font-semibold text-white truncate">{event.title}</h3>
                 </div>
                 <div className="flex items-center gap-1.5 ml-4 shrink-0">
-                    <svg className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                         <circle cx="9" cy="7" r="4" />
                         <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                     </svg>
-                    <span className="text-sm font-medium text-indigo-300">{event.votes_count}</span>
+                    <span className="text-sm font-medium text-gold-300">{event.votes_count}</span>
                 </div>
             </div>
 
@@ -209,9 +209,9 @@ export default function Home({ events }) {
             )}
 
             {/* Floating orbs */}
-            <div className="floating-orb" style={{ width: 300, height: 300, background: '#6366f1', top: '10%', left: '5%' }} />
-            <div className="floating-orb" style={{ width: 250, height: 250, background: '#06b6d4', bottom: '15%', right: '10%', animationDelay: '-7s' }} />
-            <div className="floating-orb" style={{ width: 200, height: 200, background: '#8b5cf6', top: '50%', left: '50%', animationDelay: '-14s' }} />
+            <div className="floating-orb" style={{ width: 300, height: 300, background: '#d4af37', top: '10%', left: '5%' }} />
+            <div className="floating-orb" style={{ width: 250, height: 250, background: '#3a63c0', bottom: '15%', right: '10%', animationDelay: '-7s' }} />
+            <div className="floating-orb" style={{ width: 200, height: 200, background: '#f0d78a', top: '50%', left: '50%', animationDelay: '-14s' }} />
 
             <div className="min-h-screen relative z-10">
                 {/* Header */}
@@ -221,7 +221,7 @@ export default function Home({ events }) {
                             <div>
                                 <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
                                     Event
-                                    <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"> Voting</span>
+                                    <span className="bg-gradient-to-r from-gold-400 via-gold-300 to-gold-500 bg-clip-text text-transparent"> Voting</span>
                                 </h1>
                                 <p className="mt-2 text-slate-400 text-sm sm:text-base">
                                     Organize events and let everyone vote
@@ -247,8 +247,8 @@ export default function Home({ events }) {
                     <div className="max-w-5xl mx-auto">
                         {events.length === 0 ? (
                             <div className="glass text-center py-20 px-6 opacity-0 animate-fade-in-up">
-                                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 flex items-center justify-center border border-indigo-500/20">
-                                    <svg className="w-8 h-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-gold-500/20 to-gold-500/20 flex items-center justify-center border border-gold-500/20">
+                                    <svg className="w-8 h-8 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                                         <line x1="16" y1="2" x2="16" y2="6" />
                                         <line x1="8" y1="2" x2="8" y2="6" />

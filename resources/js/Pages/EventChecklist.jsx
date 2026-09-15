@@ -80,7 +80,7 @@ export default function EventChecklist({ event }) {
             <Head title={`Checklist - ${event.title}`} />
 
             {/* Floating orbs */}
-            <div className="floating-orb" style={{ width: 320, height: 320, background: '#6366f1', top: '5%', left: '10%' }} />
+            <div className="floating-orb" style={{ width: 320, height: 320, background: '#d4af37', top: '5%', left: '10%' }} />
             <div className="floating-orb" style={{ width: 240, height: 240, background: '#10b981', bottom: '10%', right: '5%', animationDelay: '-8s' }} />
 
             <div className="min-h-screen relative z-10 px-4 py-12">
@@ -120,7 +120,7 @@ export default function EventChecklist({ event }) {
                             </div>
                             <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden border border-white/5">
                                 <div 
-                                    className="h-full bg-indigo-500 transition-all duration-500"
+                                    className="h-full bg-gold-500 transition-all duration-500"
                                     style={{ width: `${totalCount > 0 ? (presentCount / totalCount) * 100 : 0}%` }}
                                 />
                             </div>
@@ -181,7 +181,7 @@ export default function EventChecklist({ event }) {
                         {/* Add Person */}
                         <div className="glass p-5">
                             <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                                <svg className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <svg className="w-4 h-4 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                     <path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                                 </svg>
                                 Add Person
@@ -197,7 +197,7 @@ export default function EventChecklist({ event }) {
                                 <button
                                     type="submit"
                                     disabled={adding || !newName.trim()}
-                                    className="px-4 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold text-sm border-none cursor-pointer transition-all disabled:opacity-50"
+                                    className="px-4 py-2 rounded-xl bg-gold-500 hover:bg-gold-600 text-white font-semibold text-sm border-none cursor-pointer transition-all disabled:opacity-50"
                                 >
                                     {adding ? '...' : 'Add'}
                                 </button>
@@ -214,10 +214,10 @@ export default function EventChecklist({ event }) {
                                     <div 
                                         key={attendance.id}
                                         onClick={() => toggleAttendance(attendance)}
-                                        className={`flex items-center gap-3 p-4 cursor-pointer transition-colors hover:bg-white/5 ${attendance.is_present ? 'bg-indigo-500/5' : ''}`}
+                                        className={`flex items-center gap-3 p-4 cursor-pointer transition-colors hover:bg-white/5 ${attendance.is_present ? 'bg-gold-500/5' : ''}`}
                                     >
                                         {/* Attendance Checkbox */}
-                                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center border transition-all duration-200 ${attendance.is_present ? 'bg-indigo-500 border-indigo-500 text-white shadow-[0_0_10px_rgba(99,102,241,0.3)]' : 'bg-transparent border-slate-600'}`}>
+                                        <div className={`w-6 h-6 rounded-lg flex items-center justify-center border transition-all duration-200 ${attendance.is_present ? 'bg-gold-500 border-gold-500 text-white shadow-[0_0_10px_rgba(212,175,55,0.3)]' : 'bg-transparent border-slate-600'}`}>
                                             {attendance.is_present && (
                                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                     <polyline points="20 6 9 17 4 12" />
@@ -230,7 +230,7 @@ export default function EventChecklist({ event }) {
                                                 {attendance.user_name}
                                             </span>
                                             {attendance.is_present ? (
-                                                <span className="text-[9px] font-bold uppercase tracking-widest text-indigo-400">Arrived</span>
+                                                <span className="text-[9px] font-bold uppercase tracking-widest text-gold-400">Arrived</span>
                                             ) : (
                                                 <span className="text-[9px] font-bold uppercase tracking-widest text-slate-600">Pending</span>
                                             )}
